@@ -1,0 +1,54 @@
+# Binários compilados
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+logagg
+*.test
+*.out
+
+# Arquivos de build
+bin/
+build/
+dist/
+
+# Arquivos de dependências Go
+vendor/
+go.work
+
+# Arquivos de cobertura de testes
+*.coverprofile
+coverage.txt
+coverage.html
+
+# IDEs e Editores
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Arquivos de debug
+__debug_bin
+debug
+*.pprof
+
+# Variáveis de ambiente e configurações locais
+.env
+.env.local
+*.local
+
+# Logs
+*.log
+logs/
+
+# Arquivos temporários
+tmp/
+temp/
+*.tmp
+
+# Arquivos de sistema
+Thumbs.db
+.DS_Store
