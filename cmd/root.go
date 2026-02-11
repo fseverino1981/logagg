@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"logagg/internal/aggregator"
 	"logagg/internal/reader"
 	"os"
 	"os/signal"
@@ -17,25 +18,31 @@ var rootCmd = &cobra.Command{
 	Use:   "logagg",
 	Short: "Monitorador de logs",
 	Run: func(cmd *cobra.Command, args []string) {
-		var wg sync.WaitGroup
 		ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
+		var wg sync.WaitGroup
 		defer cancel()
-		channels := make([]chan string, len(files))
+		channels := make([]<-chan string, 0, len(files))
+		fmt.Println(files)
 		for _, f := range files {
+
 			if err := reader.ValidateFile(f); err != nil {
 				fmt.Println("Erro: ", err)
 				continue
 			}
-			wg.Add(1)
-			go func(filename string) {
-				defer wg.Done()
-				for lines := range reader.ReadLines(ctx, filename) {
-					fmt.Println(lines)
-				}
+			ch := reader.ReadLines(ctx, f)
+			channels = append(channels, ch)
 
-			}(f)
 		}
+
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for lines := range aggregator.Aggregate(ctx, channels...) {
+				fmt.Println(lines)
+			}
+		}()
 		wg.Wait()
+		fmt.Println("Logs processados")
 	},
 }
 
