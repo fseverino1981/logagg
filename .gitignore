@@ -1,4 +1,4 @@
-# Binários compilados
+# Binï¿½rios compilados
 *.exe
 *.exe~
 *.dll
@@ -12,8 +12,9 @@ logagg
 bin/
 build/
 dist/
+log/
 
-# Arquivos de dependências Go
+# Arquivos de dependï¿½ncias Go
 vendor/
 go.work
 
@@ -35,7 +36,7 @@ __debug_bin
 debug
 *.pprof
 
-# Variáveis de ambiente e configurações locais
+# Variï¿½veis de ambiente e configuraï¿½ï¿½es locais
 .env
 .env.local
 *.local
@@ -44,7 +45,7 @@ debug
 *.log
 logs/
 
-# Arquivos temporários
+# Arquivos temporï¿½rios
 tmp/
 temp/
 *.tmp

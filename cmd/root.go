@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"logagg/internal/aggregator"
+	"logagg/internal/filter"
 	"logagg/internal/reader"
 	"os"
 	"os/signal"
@@ -13,6 +14,7 @@ import (
 )
 
 var files []string
+var filterParam string
 
 var rootCmd = &cobra.Command{
 	Use:   "logagg",
@@ -37,9 +39,14 @@ var rootCmd = &cobra.Command{
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			for lines := range aggregator.Aggregate(ctx, channels...) {
-				fmt.Println(lines)
+
+			lines := aggregator.Aggregate(ctx, channels...)
+			result := filter.Filter(lines, filterParam)
+
+			for l := range result {
+				fmt.Println(l)
 			}
+
 		}()
 		wg.Wait()
 		fmt.Println("Logs processados")
@@ -49,6 +56,7 @@ var rootCmd = &cobra.Command{
 func init() {
 
 	rootCmd.Flags().StringSliceVarP(&files, "files", "f", []string{}, "Arquivos para monitorar")
+	rootCmd.Flags().StringVarP(&filterParam, "filter", "t", "", "Filtar o retorno do log por palavra")
 }
 
 func Execute() {
